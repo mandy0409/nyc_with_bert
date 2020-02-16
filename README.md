@@ -2,6 +2,8 @@
 
 nyc_with_bert
 
+Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl6e?usp=sharing
+
 ## 해야할 일들 정리
 
 1. **Taxi 수요 예측 관련 논문 리스트화 및 요약 정리 (기왕이면 엑셀이나 마크다운에)**
