@@ -42,3 +42,10 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 
 4. **상세 일정 확정 (이게 내 경험상으론 생각보다 중요한게 상세히 일정 안잡으면 뒤로 한없이 쳐짐)**
 
+## 수정사항
+
+### 2020.02.20 15:00
+
+* Reference는 드라이브로 이동
+* gitignore 수정
+* 훈련용 main.py 작성중 => 임베딩 어떻게 되느냐에 따라서 다 달라질듯. 기본 틀만 얼추 잡아봄
