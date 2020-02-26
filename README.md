@@ -49,3 +49,10 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 * Reference는 드라이브로 이동
 * gitignore 수정
 * 훈련용 main.py 작성중 => 임베딩 어떻게 되느냐에 따라서 다 달라질듯. 기본 틀만 얼추 잡아봄
+
+### 2020.02.27 01:00
+
+* 데이터 전처리 코드 공유
+* 전처리 데이터 (시간대별, 그냥 location ID 기준으로 count함)
+* 코드 아직 수정중 사실 내가 하려니까 약간 막막해서 손에 잡히질 않네..
+
