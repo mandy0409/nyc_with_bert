@@ -56,3 +56,7 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 * 전처리 데이터 (시간대별, 그냥 location ID 기준으로 count함)
 * 코드 아직 수정중 사실 내가 하려니까 약간 막막해서 손에 잡히질 않네..
 
+### 2020.03.02 21:00
+
+* 데이터 전처리 코드 수정 (위치/요일/시간/count 순)
+* 전처리 데이터 올려놓았으며, embedding 쪽 손보는 중...
