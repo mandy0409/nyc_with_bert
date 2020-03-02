@@ -25,22 +25,44 @@ def main(args):
         # Count by pickup time index
         for t in tqdm(range(48)):
             time_dat = dat1[dat1['pickup_time_index'] == t] # Time data setting
-            time_dat_count = time_dat.groupby(time_dat['PULocationID']).count() # Counting
+            groupby_index = [time_dat['PULocationID'], time_dat['pickup_weekday_index']]
+            time_dat_count = time_dat.groupby(groupby_index).count() # Counting
+            index_list = time_dat_count.index.tolist()
+            
+            # Make dataframe
             new_dat = pd.DataFrame({
-                'count':time_dat_count['VendorID'].tolist()
+                'location': [x[0] for x in index_list],
+                'weekday': [x[1] for x in index_list],
+                'hour': [t for _ in range(len(index_list))],
+                'count': time_dat_count['VendorID'].tolist()
             })
-            new_dat.index = time_dat_count.index.tolist() # because of pandas's weird setting
+            
+            # Concatenate
             if t == 0:
-                total_dat = new_dat
+                concat_dat = new_dat
             else:
-                total_dat = pd.concat([total_dat, new_dat], axis=1) # Concat data
+                concat_dat = pd.concat([concat_dat, new_dat], axis=0) # Concat data
 
-        total_dat.columns = list(set(dat1['pickup_time_index'])) # Column setting
-        total_dat = total_dat.fillna(0) # Fill NaN by zero
-        total_dat = total_dat.astype(int) # Type setting by integer
+        # Prepare to merge data
+        total_list = list()
+        for l in set(concat_dat['location']):
+            for w in set(concat_dat['weekday']):
+                for h in set(concat_dat['hour']):
+                    total_list.append(str(l) + '/' + str(w) + '/' + str(h))
 
+        all_dat = pd.DataFrame([x.split('/') for x in total_list])
+
+        # all_dat preprocessing
+        column_name = ['location', 'weekday', 'hour']
+        all_dat.columns = column_name
+        all_dat = all_dat.astype('int')
+
+        # Merge data
+        total_dat = pd.merge(left=all_dat, right=concat_dat, on=column_name, how='left')
+
+        # Save to csv file
         month = i + 1
-        total_dat.to_csv(f'./newyork_yellow_taxi_2019-0{month}_count.csv', index=False)
+        total_dat.to_csv(os.path.join(args.data_path, f'newyork_yellow_taxi_2019-0{month}_count.csv'), index=False)
 
 if __name__=='__main__':
     # Args Parser
