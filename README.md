@@ -60,3 +60,7 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 
 * 데이터 전처리 코드 수정 (위치/요일/시간/count 순)
 * 전처리 데이터 올려놓았으며, embedding 쪽 손보는 중...
+
+### 2020.03.04 21:00
+
+* 데이터 전처리 h5로 수정. (전에 짜놓은 코드가 h5기준이라 그거 그냥 그대로 쓰려고 바꿈)
