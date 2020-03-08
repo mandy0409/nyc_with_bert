@@ -24,7 +24,7 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 
 2. **Input Output 시각화 (논문에도 쓰고 날 이해도 시킬 용도)**
 
-* Input : a*b Grid, 30분 단위로 일주일(또는 하루)데이터 --> map shapefile 은 있으나, traffic 데이터를 어떻게 활용해야함? 
+* Input : a*b Grid,130분 단위로 일주일(또는 하루)데이터 --> map shapefile 은 있으나, traffic 데이터를 어떻게 활용해야함? 
 
 >  D1. 공간 & 트래픽 정보 : 뉴욕지도(grid 나눈값 못찾으면 구역으로 나눈 ID값 우선 적용), 트래픽정보 (30분단위)
 
@@ -37,7 +37,10 @@ Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl
 
 3. **모델 세부내용을 제외한 기초 코드 (이거 주말동안 내가 짜놓을게)**
 
-   
+   ### 2020.03.07 17:00
+
+* 수정사항 확인완료, 다른 모델 코드확인중.. 인데 NEXT 로 뭘 실행해야하는지가 명확하게 머릿속에 그려지지가 않는중.
+코드를 내가 다시 써보면서 코드로 구조 
 
 
 4. **상세 일정 확정 (이게 내 경험상으론 생각보다 중요한게 상세히 일정 안잡으면 뒤로 한없이 쳐짐)**
