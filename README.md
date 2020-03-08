@@ -3,7 +3,7 @@
 nyc_with_bert
 
 Dataset : https://drive.google.com/drive/folders/14nKtjfIjFNC_iZFw-XwVvHMFQ0uDXl6e?usp=sharing
-(2019.01~04 update)
+(2019.01~06 update)
 
 ## 해야할 일들 정리
 
