@@ -1,9 +1,6 @@
 # Import Module
-import os
+import h5py
 import numpy as np
-import pandas as pd
-
-from glob import glob
 
 # Import PyTorch
 import torch
@@ -12,21 +9,44 @@ from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Dataset
 
 class CustomDataset(Dataset):
-    def __init__(self, data_path, data_type):
-        self.data_path = data_path
-        self.data_type = data_type
-
-        data_list = sorted(glob(os.path.join(data_path, data_type)))
-        for i, data in enumerate(data_list):
-            if i == 0:
-                total_dat = data
-            else:
-                total_dat = pd.concat([total_dat, data])
-
-        self.num_data = len(total_dat)
-
+    def __init__(self, file_path):
+        self.file = h5py.File(file_path, 'r')
+        self.num_data = len(self.file[list(self.file.keys())[0]])
+        
     def __getitem__(self, index):
-        ix_dat = data.iloc[index:index+12] # 12 수정 필요
-        weekday = ix_dat['pickup_weekday_index'].tolist()
-        holiday = ix_dat['pickup_holiday'].tolist()
-        time = #
+        src = self.file[list(self.file.keys())[0]][index]
+        hour = self.file[list(self.file.keys())[1]][index]
+        weekday = self.file[list(self.file.keys())[2]][index]
+        src_rev = np.flip(src)
+        trg = self.file[list(self.file.keys())[3]][index]
+        return src, src_rev, weekday, hour, trg
+    
+    def __len__(self):
+        return self.num_data
+
+class Transpose_tensor:
+    def __init__(self, dim=1):
+        self.dim = dim
+
+    def transpose_tensor(self, batch):
+        (src, src_rev, weekday, hour, trg) = zip(*batch)
+        batch_size = len(src)
+
+        src_t = torch.FloatTensor(src)
+        src_rev_t = torch.FloatTensor(src_rev)
+        src_hour_t = torch.LongTensor(hour)
+        src_weekday_t = torch.LongTensor(weekday)
+        trg_t = torch.LongTensor(trg)
+        #
+        # src = torch.cat(src).view(-1, batch_size).transpose(0, 1)
+        # src_rev = torch.cat(src_rev, dim=self.dim).view(-1, batch_size).transpose(0, 1)
+        # trg = torch.cat(trg).view(-1, batch_size).transpose(0, 1)
+
+        return src_t, src_rev_t, src_hour_t, src_weekday_t, trg_t
+
+    def __call__(self, batch):
+        return self.transpose_tensor(batch)
+
+def getDataLoader(dataset, batch_size, shuffle, num_workers, pin_memory, drop_last):
+    return DataLoader(dataset, drop_last=drop_last, batch_size=batch_size, collate_fn=Transpose_tensor(),
+                      shuffle=shuffle, pin_memory=pin_memory, num_workers=num_workers) 

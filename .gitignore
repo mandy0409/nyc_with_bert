@@ -3,3 +3,4 @@ model/__pycache__/*
 model/embedding/__pycache__/*
 data/*
 .ipynb_checkpoints/*
+save/*

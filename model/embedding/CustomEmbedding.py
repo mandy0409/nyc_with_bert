@@ -2,18 +2,20 @@ import torch
 from torch import nn
 from .token import TokenEmbedding
 from .positional import PositionalEmbedding
-from .segment import SegmentEmbedding
+from .weekday import WeekdayEmbedding
+from .hour import HourEmbedding
 
 class CustomEmbedding(nn.Module):
     """
     Embedding which is consisted with under features
-    1. TokenEmbedding : normal embedding matrix (with Word2Vec)
+    1. TokenEmbedding : normal embedding matrix
     2. PositionalEmbedding : adding positional information
-    3. SegmentEmbedding : adding segment information (Title, Body, Answer)
+    3. WeekdayEmbedding : adding weekday information
+    4. HourEmbedding : adding time information
     sum of all these features are output of Embedding
     """
 
-    def __init__(self, vocab_size, d_embedding, d_model, device=None, pad_idx=0, max_len=300):
+    def __init__(self, d_embedding, d_model, device=None, pad_idx=0):
         """
         :param vocab_size: total vocab size
         :param embed_size: embedding size of token embedding
@@ -22,13 +24,14 @@ class CustomEmbedding(nn.Module):
         super().__init__()
         self.device = device
 
-        self.token = TokenEmbedding(vocab_size=vocab_size, embed_size=d_embedding, pad_idx=pad_idx)
-        self.position = PositionalEmbedding(d_embedding=d_embedding, d_model=d_model, max_len=max_len, device=self.device)
-        self.segment = SegmentEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
+        self.token = nn.Linear(1, d_embedding).to(device)
+        self.position = PositionalEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
+        self.weekday = WeekdayEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
+        self.hour = HourEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
 
         self.linear_layer = nn.Linear(d_embedding, d_model)
         self.norm = nn.LayerNorm(d_model)
 
-    def forward(self, sequence):
-        x = self.linear_layer(self.token(sequence).to(self.device)) + self.position(sequence) + self.segment(sequence)
+    def forward(self, sequence, weekday, hour):
+        x = self.linear_layer(self.token(sequence.unsqueeze(2))) + self.position(sequence) + self.hour(hour) + self.weekday(weekday)
         return self.norm(x)
