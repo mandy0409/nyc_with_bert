@@ -71,3 +71,17 @@ def main(args):
         total_dat.to_csv(os.path.join(args.data_path, f'newyork_yellow_taxi_2019-0{month}_count.csv'), index=False)
 
     print('Done!')
+
+if __name__=='__main__':
+    # Args Parser
+    parser = argparse.ArgumentParser(description='Argparser')
+    parser.add_argument('--data_path', type=str, default='./data/', help='data path')
+    parser.add_argument('--data_type', type=str, default='*.csv', help='data type')
+    parser.add_argument('--data_split_month', type=int, default=3, help='baseline of data split month')
+    parser.add_argument('--input_timestep', type=int, default=12, help='input time step')
+    parser.add_argument('--output_timestep', type=int, default=12, help='output time step')
+    args = parser.parse_args()
+    start_time = time.time()
+    main(args)
+    print(f'{round((time.time()-start_time)/60, 4)}min spend...')
+    print('Done!')
