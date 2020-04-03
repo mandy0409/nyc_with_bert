@@ -111,7 +111,7 @@ def main(args):
                     outputs = model(src, src_hour, src_weekday)
 
                     # Backpropagate Loss
-                    loss = criterion(outputs, trg)
+                    loss = criterion(outputs, trg.to(torch.float))
                     if phase == 'train':
                         loss.backward()
                         torch_utils.clip_grad_norm_(model.parameters(), args.grad_clip)
