@@ -1,0 +1,48 @@
+# Import Module
+import h5py
+import numpy as np
+
+# Import PyTorch
+import torch
+
+from torch.utils.data import DataLoader
+from torch.utils.data.dataset import Dataset
+
+class CustomDataset(Dataset):
+    def __init__(self, file_path):
+        self.file = h5py.File(file_path, 'r')
+        self.num_data = len(self.file[list(self.file.keys())[0]])
+        
+    def __getitem__(self, index):
+        src = self.file[list(self.file.keys())[0]][index]
+        hour = self.file[list(self.file.keys())[1]][index]
+        weekday = self.file[list(self.file.keys())[2]][index]
+        src_rev = np.flip(src)
+        trg = self.file[list(self.file.keys())[3]][index]
+        return src, src_rev, hour, weekday, trg
+    
+    def __len__(self):
+        return self.num_data
+
+class Transpose_tensor:
+    def __init__(self, dim=1):
+        self.dim = dim
+
+    def transpose_tensor(self, batch):
+        (src, src_rev, weekday, hour, trg) = zip(*batch)
+        batch_size = len(src)
+
+        src_t = torch.LongTensor(src)
+        src_rev_t = torch.LongTensor(src_rev)
+        src_hour_t = torch.LongTensor(hour)
+        src_weekday_t = torch.LongTensor(weekday)
+        trg_t = torch.LongTensor(trg)
+
+        return src_t, src_rev_t, src_hour_t, src_weekday_t, trg_t
+
+    def __call__(self, batch):
+        return self.transpose_tensor(batch)
+
+def getDataLoader(dataset, batch_size, shuffle, num_workers, pin_memory, drop_last):
+    return DataLoader(dataset, drop_last=drop_last, batch_size=batch_size, collate_fn=Transpose_tensor(),
+                      shuffle=shuffle, pin_memory=pin_memory, num_workers=num_workers) 

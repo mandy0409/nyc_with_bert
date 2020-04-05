@@ -29,7 +29,7 @@ class CustomEmbedding(nn.Module):
         self.weekday = WeekdayEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
         self.hour = HourEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
 
-        self.linear_layer = nn.Linear(d_embedding, d_model)
+        self.linear_layer = nn.Linear(d_embedding, d_model)#.to(device)
         self.norm = nn.LayerNorm(d_model)
 
     def forward(self, sequence, weekday, hour):

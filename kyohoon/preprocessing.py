@@ -8,6 +8,7 @@ import pandas as pd
 
 from glob import glob
 from tqdm import tqdm
+from random import shuffle
 from datetime import datetime
 from itertools import product
 
@@ -20,8 +21,7 @@ def main(args):
     data_list = sorted(glob(os.path.join(args.data_path, args.data_type)))
     print(f'It will {len(data_list)} time loop...')
 
-    train_dat = pd.DataFrame()
-    valid_dat = pd.DataFrame()
+    total_count_dat = pd.DataFrame()
 
     for i, data in enumerate(data_list):
         # Read Data
@@ -70,7 +70,51 @@ def main(args):
         })
         total_dat.to_csv(os.path.join(args.data_path, f'newyork_yellow_taxi_2019-0{month}_count.csv'), index=False)
 
-    print('Done!')
+        # Concat
+        total_count_dat = pd.concat([total_count_dat, total_dat])
+    
+    total_count_dat.to_csv(os.path.join(args.data_path, 'newyork_yellow_taxi_total_count.csv'))
+
+    print('Count data save done!')
+    print('H5 processing & train, valid split...')
+
+    # Total data preprocessing
+    total_count_dat = total_count_dat.sort_values(['location', 'date', 'hour'])
+    input_, weekday_, hour_, output_ = list(), list(), list(), list()
+
+    for l in tqdm(set(total_dat['location'])):
+        l_dat = total_dat[total_dat['location'] == l]
+        for i in range(len(l_dat) - 24):
+            src_dat = l_dat[i:i+12]
+            input_.append(src_dat['count'].tolist())
+            weekday_.append(src_dat['weekday'].tolist())
+            hour_.append(src_dat['hour'].tolist())
+            trg_dat = l_dat[i+12:i+24]
+            output_.append(trg_dat['count'].tolist())
+
+    # Train & Validation set split
+    ix = list(range(len(input_)))
+    shuffle(ix)
+
+    train_ix = ix[:int(len(ix) * 0.8)]
+    valid_ix = ix[int(len(ix) * 0.8):]
+
+    # H5 save
+    print('Saving...')
+    hf_data_train = h5py.File(os.path.join(args.data_path, 'preprocessed_train.h5'), 'w')
+    hf_data_train.create_dataset(f'train_src', data=[input_[i] for i in train_ix])
+    hf_data_train.create_dataset(f'train_src_week', data=[weekday_[i] for i in train_ix])
+    hf_data_train.create_dataset(f'train_src_hour', data=[hour_[i] for i in train_ix])
+    hf_data_train.create_dataset(f'train_trg', data=[output_[i] for i in train_ix])
+    hf_data_train.close()
+
+    hf_data_valid = h5py.File(os.path.join(args.data_path, 'preprocessed_valid.h5'), 'w')
+    hf_data_valid.create_dataset(f'valid_src', data=[input_[i] for i in valid_ix])
+    hf_data_valid.create_dataset(f'valid_src_week', data=[weekday_[i] for i in valid_ix])
+    hf_data_valid.create_dataset(f'valid_src_hour', data=[hour_[i] for i in valid_ix])
+    hf_data_valid.create_dataset(f'valid_trg', data=[output_[i] for i in valid_ix])
+    hf_data_valid.close()
+
 
 if __name__=='__main__':
     # Args Parser
