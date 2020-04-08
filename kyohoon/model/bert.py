@@ -34,7 +34,10 @@ class littleBert(nn.Module):
 
     def forward(self, sequence, hour, weekday):
         encoder_out = self.src_embedding(sequence, hour, weekday)
-        # src_key_padding_mask = sequence == self.pad_idx
+        # print(encoder_out)
+        # return encoder_out
+        # print(encoder_out)
+        # # src_key_padding_mask = sequence == self.pad_idx
 
         for i in range(len(self.encoders)):
             encoder_out = self.encoders[i](encoder_out)

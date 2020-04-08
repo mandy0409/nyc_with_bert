@@ -4,3 +4,5 @@ model/embedding/__pycache__/*
 data/*
 .ipynb_checkpoints/*
 save/*
+kyohoon/__pycache__/*
+kyohoon/.ipynb_checkpoints/*

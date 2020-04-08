@@ -7,8 +7,9 @@ class PositionalEmbedding(nn.Module):
         super().__init__()
         self.max_len = max_len
         self.device = device
+        self.d_embedding = d_embedding
 
-        self.embedding = nn.Embedding(self.max_len, d_embedding)
+        self.embedding = nn.Embedding(self.max_len, self.d_embedding)
         self.fep_linear = nn.Linear(d_embedding, d_model) # For factorized embedding parameterization (from ALBERT)
 
     def forward(self, x):

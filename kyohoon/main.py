@@ -144,7 +144,7 @@ def main(args):
 if __name__=='__main__':
     # Args Parser
     parser = argparse.ArgumentParser(description='Argparser')
-    parser.add_argument('--data_path', type=str, default='./data/', help='data path')
+    parser.add_argument('--data_path', type=str, default='../data/', help='data path')
     parser.add_argument('--data_type', type=str, default='*.h5', help='data type')
     parser.add_argument('--print_freq', type=int, default=100, help='loss print frequency')
 
