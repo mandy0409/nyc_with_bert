@@ -29,21 +29,23 @@ class littleBert(nn.Module):
             TransformerEncoderLayer(d_model, self_attn, dim_feedforward,
                 activation='gelu', dropout=dropout) for i in range(n_layers)])
 
-        # Output of model
-        self.linear = nn.Linear(d_model, 1)
+        # Output Linear Part
+        self.src_output_linear = nn.Linear(d_model, d_embedding)
+        self.src_output_concatlinear = nn.Linear((d_embedding + d_embedding), d_embedding)
+        self.src_output_bilinear = nn.Bilinear(d_embedding, d_embedding, d_embedding)
+        self.src_output_linear2 = nn.Linear(d_embedding, 1)
 
     def forward(self, sequence, hour, weekday):
         encoder_out = self.src_embedding(sequence, hour, weekday)
-        # print(encoder_out)
-        # return encoder_out
-        # print(encoder_out)
         # # src_key_padding_mask = sequence == self.pad_idx
 
         for i in range(len(self.encoders)):
             encoder_out = self.encoders[i](encoder_out)
-        outputs = self.linear(encoder_out)
 
-        return outputs.squeeze(2)
+        encoder_out1 = self.dropout(F.gelu(self.src_output_linear(encoder_out)))
+        encoder_out = self.src_output_linear2(encoder_out1).transpose(0, 1).contiguous()
+
+        return encoder_out
 
 class TransformerEncoderLayer(nn.Module):
     def __init__(self, d_model, self_attn, dim_feedforward=2048, dropout=0.1, 

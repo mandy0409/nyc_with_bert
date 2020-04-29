@@ -64,6 +64,7 @@ def main(args):
     # Preparing
     best_val_loss = None
     now = datetime.datetime.now()
+    total_loss_list = list()
     nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
     if not os.path.exists('./save/'):
         os.mkdir('./save/')

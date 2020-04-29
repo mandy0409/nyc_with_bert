@@ -61,6 +61,7 @@ def main(args):
     lr_step_scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_decay_step, gamma=args.lr_decay_gamma) # Decay LR by a factor of 0.1 every step_size
 
     # Preparing
+    val_loss = 0
     best_val_loss = None
     now = datetime.datetime.now()
     nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
@@ -81,6 +82,8 @@ def main(args):
 
     spend_time = round((time.time() - start_time) / 60, 4)
     print(f'Setting done...! / {spend_time}min spend...!')
+    
+    total_loss_list = list()
 
     for epoch in range(args.num_epochs):
         print('Epoch {}/{}'.format(epoch + 1, args.num_epochs))
