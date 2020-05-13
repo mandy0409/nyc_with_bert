@@ -31,7 +31,16 @@ class CustomEmbedding(nn.Module):
 
         self.linear_layer = nn.Linear(d_embedding, d_model)#.to(device)
         self.norm = nn.LayerNorm(d_model)
+        # To concat
+        # self.concat_linear_layer = nn.Linear(d_embedding * 3, d_embedding)
 
     def forward(self, sequence, weekday, hour):
         x = self.linear_layer(self.token(sequence.unsqueeze(2))) + self.position(sequence) + self.hour(hour) + self.weekday(weekday)
+        # token_emb = self.linear_layer(self.token(sequence.unsqueeze(2)))
+        # position_emb = self.position(sequence)
+        # hour_emb = self.hour(hour)
+        # weekday_emb = self.weekday(weekday)
+        # emb_cat = torch.cat((token_emb, position_emb, hour_emb, weekday_emb), dim=2)
+        # emb_cat = emb_cat.view(8, -1, d_embedding * 3)
+        # x = concat_linear(emb_cat).view(8, d_embedding * 3, -1)
         return self.norm(x)
