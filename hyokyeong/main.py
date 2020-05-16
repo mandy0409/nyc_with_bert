@@ -170,9 +170,5 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     main(args)
-    # data_list = sorted(glob(os.path.join(args.data_path, args.data_type)))
 
-    # # print(glob(os.path.join(args.data_path, args.data_type)))
-    # print(data_list[0])
-    # print(CustomDataset(data_list[0]))
     print('Done!')
