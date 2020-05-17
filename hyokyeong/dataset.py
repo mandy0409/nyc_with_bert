@@ -25,35 +25,6 @@ class CustomDataset(Dataset):
     def __len__(self):
         return self.num_data
 
-'''
-h5 파일 테스트
-
-import os
-from glob import glob
-
-data_list = sorted(glob(os.path.join('./data/', '*.h5')))
-print(data_list[0])
-# print(glob(os.path.join(args.data_path, args.data_type)))
-
-file_path = './data/preprocessed_train.h5'
-h5 = h5py.File(file_path, 'r')
-
-with h5py.File(file_path, "r") as f:
-    # List all groups
-    print("Keys: %s" % f.keys())
-    a_group_key = list(f.keys())[0]
-
-    # Get the data
-    data = list(f[a_group_key])
-    
-CustomDataset(file_path)
-'''
-
-# import os
-# from glob import glob
-# data_list = sorted(glob(os.path.join('./data/', '*.h5')))
-# print(data_list)
-# print(CustomDataset(data_list[0]))
 
 class Transpose_tensor:
     def __init__(self, dim=1):
