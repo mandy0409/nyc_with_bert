@@ -1,6 +1,7 @@
 # Import Module
 import os
 import time
+import h5py
 import datetime
 import argparse
 import numpy as np
@@ -19,6 +20,15 @@ import torch.nn.utils as torch_utils
 from model.bert import littleBert
 from dataset import CustomDataset, getDataLoader
 
+
+# HK - GPU
+import torch
+print(torch.__version__)
+torch.cuda.get_device_name(0)
+torch.cuda.is_available()
+print(torch.cuda.is_available())
+
+
 def main(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -28,11 +38,12 @@ def main(args):
 
     data_list = sorted(glob(os.path.join(args.data_path, args.data_type)))
 
+
     dataset_dict = {
         'train': CustomDataset(data_list[0]),
         'valid': CustomDataset(data_list[1])
     }
-
+    
     dataloader_dict = {
         'train':  getDataLoader(dataset_dict['train'], 
                                 shuffle=True,
@@ -45,8 +56,8 @@ def main(args):
                                 drop_last=True, 
                                 pin_memory=True, 
                                 batch_size=args.batch_size,
-                                num_workers=args.num_workers)
-    }
+                                num_workers=args.num_workers)}
+
 
     # Model setting
     model = littleBert(pad_idx=args.pad_idx, bos_idx=args.bos_idx, eos_idx=args.eos_idx, 
@@ -92,22 +103,26 @@ def main(args):
                 model.train()
             else:
                 model.eval()
+           
+            print(dataloader_dict[phase])
+           
 
             # Iterate over data
             for i, input_ in enumerate(tqdm(dataloader_dict[phase])):
 
-                # Input to Device(CUDA) and split
+               # Input to Device(CUDA) and split
                 src = input_[0].to(device)
-                src_hour = input_[2].to(device)
+                src_hour = input_[1].to(device)
                 src_weekday = input_[3].to(device)
                 trg = input_[4].to(device)
+                src_location = input_[2].to(device)
 
                 # Optimizer Setting
                 optimizer.zero_grad()
 
                 # Model Training & Validation
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(src, src_hour, src_weekday)
+                    outputs = model(src, src_hour, src_weekday, src_location)
 
                     # Backpropagate Loss
                     loss = criterion(outputs, trg.to(torch.float))
