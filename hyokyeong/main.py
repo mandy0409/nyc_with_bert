@@ -104,10 +104,10 @@ def main(args):
 
                # Input to Device(CUDA) and split
                 src = input_[0].to(device)
-                src_hour = input_[1].to(device)
+                src_hour = input_[2].to(device)
                 src_weekday = input_[3].to(device)
                 trg = input_[4].to(device)
-                src_location = input_[2].to(device)
+                src_location = input_[5].to(device)
 
                 # Optimizer Setting
                 optimizer.zero_grad()
