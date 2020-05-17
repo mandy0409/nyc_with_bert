@@ -39,7 +39,7 @@ class Transpose_tensor:
         src_hour_t = torch.LongTensor(hour)
         src_weekday_t = torch.LongTensor(weekday)
         trg_t = torch.FloatTensor(trg)
-        location_t = torch.FloatTensor(location)
+        location_t = torch.LongTensor(location)
         
         return src_t, src_rev_t, src_hour_t, src_weekday_t, trg_t, location_t
 

@@ -17,7 +17,7 @@ class CustomEmbedding(nn.Module):
         self.device = device
 
         self.token = nn.Linear(1, d_embedding).to(device)
-        self.position = PositionalEmbedding_kh(d_embedding=d_embedding, d_model=d_model, device=self.device)
+        self.position = PositionalEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
         self.weekday = WeekdayEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
         self.hour = HourEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
         self.location = LocationEmbedding(d_embedding=d_embedding, d_model=d_model, device=self.device)
@@ -26,9 +26,9 @@ class CustomEmbedding(nn.Module):
         self.norm = nn.LayerNorm(d_model)
         
         # Add: To concat
-        self.concat_linear_layer = nn.Linear(d_embedding * 3, d_embedding)
+        self.concat_linear_layer = nn.Linear(d_embedding * 4, d_embedding)
 
-    def forward(self, sequence, weekday, hour):
+    def forward(self, sequence, weekday, hour, location):
         # x = self.linear_layer(self.token(sequence.unsqueeze(2))) 
         # + self.position(sequence) 
         # + self.hour(hour) 
@@ -43,7 +43,7 @@ class CustomEmbedding(nn.Module):
         location_emb = self.location(location)
 
         emb_cat = torch.cat((token_emb, position_emb, hour_emb, weekday_emb, location_emb), dim=2)
-        emb_cat = emb_cat.view(8, -1, d_embedding * 3)
-        x = concat_linear(emb_cat).view(8, d_embedding * 3, -1)
+        emb_cat = emb_cat.view(8, -1, d_embedding * 4)
+        x = concat_linear(emb_cat).view(8, d_embedding * 4, -1)
 
         return self.norm(x)

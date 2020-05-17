@@ -32,8 +32,8 @@ class littleBert(nn.Module):
         # Output of model
         self.linear = nn.Linear(d_model, 1)
 
-    def forward(self, sequence, hour, weekday):
-        encoder_out = self.src_embedding(sequence, hour, weekday)
+    def forward(self, sequence, hour, weekday, location):
+        encoder_out = self.src_embedding(sequence, hour, weekday, location)
         # print(encoder_out)
         # return encoder_out
         # print(encoder_out)
@@ -51,6 +51,7 @@ class TransformerEncoderLayer(nn.Module):
         
         super(TransformerEncoderLayer, self).__init__()
         self.self_attn = self_attn
+
         # Implementation of Feedforward model
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
