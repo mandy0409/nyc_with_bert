@@ -1,10 +1,12 @@
-5/16
+**5/16**
+
 1. Data: PULocation ID로 전처리해서 업로드함.
 2. Main, CustomEmbedding, location, dataset 파일에 모두 location 부분 추가함.
 
+**5/17**
 
-5/17
-Main, CustomEmbedding 수정. list 에러수정
+1. Main, CustomEmbedding 수정. list 에러수정
+
 ----------------------------------------------
 Main 파일 돌렸을 때, h5py 에러발생
 
