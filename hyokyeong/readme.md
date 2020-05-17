@@ -5,7 +5,8 @@
 
 **5/17**
 
-1. Main, location Embedding 수정. list 에러수정
+1. Main, location Embedding, bert - location 부분 수정.
+2. list 에러수정
 
 ----------------------------------------------
 Main 파일 돌렸을 때, h5py 에러발생
