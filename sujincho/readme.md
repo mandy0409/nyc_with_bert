@@ -9,6 +9,6 @@
 - Main에서 Data를 받을 때, Dictionary 형식으로 구성이 된 row들의 List로 받음 
 
 
-<img src=https://github.com/mandy0409/nyc_with_bert/blob/master/sujincho/ReadMeImages/datasetfiles.png></img>
+<img src=https://github.com/mandy0409/nyc_with_bert/blob/master/sujincho/ReadMeImages/datasetfiles_1.png></img>
 
 
